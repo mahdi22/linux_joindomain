@@ -33,5 +33,5 @@ file: vars/main.yml
  ```sh
 - hosts: servers
   roles:
-    - role: mahdi22.ansible-linux-join-domain
+    - role: mahdi22.ansible_linux_joindomain
       become: yes
