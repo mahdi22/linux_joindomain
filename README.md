@@ -10,7 +10,7 @@ This is an ansible role to automaticaly join Linux Machine CentOS and Redhat usi
 
 # Installation
 
-ansible-galaxy install mahdi22.ansible_linux_join_domain
+ansible-galaxy install mahdi22.ansible_linux_joindomain
 
 # Role Variables
 
