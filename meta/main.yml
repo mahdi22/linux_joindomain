@@ -1,7 +1,8 @@
 galaxy_info:
   author: Mahdi BOURBITA
+  role_name: ansible_linux_joindomain
   description: Role Ansible for automaticly Join Domain Active Directory with sssd for Linux CentOS or Redhat 7 and 8, samba winbind for CentOS or Redhat 7
-  company: your company (optional)
+  #company: your company (optional)
 
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
@@ -41,8 +42,7 @@ galaxy_info:
   #   - 99.99
 
   galaxy_tags:
-    - Linux
-    - Active Directory
+    - linux
     - sssd
     - realm
     - samba
