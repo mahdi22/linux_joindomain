@@ -1,0 +1,56 @@
+- name: Install Required Packages
+  yum:
+    name: "{{ package }}"
+    state: present
+
+- name: Install PEXPECT With Easy_Install For CentOS 7
+  easy_install:
+    name: pexpect
+  environment: "{{ proxy_env }}"
+  when: (ansible_distribution == "CentOS" or ansible_distribution == "RedHat") and
+          (ansible_distribution_major_version == "7")
+
+- name: Install PEXPECT with PIP3.6 For CentOS 8
+  pip:
+    name: pexpect
+    executable: pip3.6
+  environment: "{{ proxy_env }}"
+  when: (ansible_distribution == "CentOS" or ansible_distribution == "RedHat") and
+          (ansible_distribution_major_version == "8")
+
+- name: Checking Domain Join status
+  command: id "{{ Join_User }}"
+  register: ad_status
+  changed_when: false
+  ignore_errors: true
+
+- name: Domain configs and Join {{ DomainName }}
+  block:
+    - name: Join CentOS 7 or 8 into Domain picard.priv
+      expect:
+        command: /bin/bash -c "/usr/sbin/realm join --user={{ Join_User }} {{ DomainName }}"
+        responses:
+          Password for *: "{{ Join_User_Pass }}"
+
+    - name: Allow user Login without FQDN
+      lineinfile:
+        backup: yes
+        state: present
+        dest: /etc/sssd/sssd.conf
+        regexp: '^{{ item.search }}'
+        line: '{{ item.replace }}'
+      with_items:
+        - { search: 'use_fully_qualified_names', replace: 'use_fully_qualified_names = False' }
+        - { search: 'fallback_homedir', replace: 'fallback_homedir = /home/%u'}
+
+    - name: Allow AD Groups
+      lineinfile:
+        backup: yes
+        state: present
+        dest: /etc/sssd/sssd.conf
+        regexp: '^simple_allow_groups'
+        line: simple_allow_groups = picard.priv, infrasys, INFRA, GP_ADM_LINUX_SUPER, GP_ADM_LINUX
+
+      notify:
+        - restart sssd
+  when: ad_status.rc !=0

@@ -1,0 +1,15 @@
+---
+# handlers file for CentOSJoinDomain
+- name: restart sssd
+  service: name=sssd state=restarted
+
+- name: restart samba related services
+  service:
+    name: "{{ item }}"
+    state: restarted
+    enabled: yes
+  with_items:
+    - smb
+    - winbind
+    - messagebus
+    - oddjobd

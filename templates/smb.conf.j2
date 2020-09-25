@@ -1,0 +1,22 @@
+[global]
+   log file = /var/log/samba/log.%m
+   max log size = 50
+   workgroup = {{ workgroup }}
+   password server = {{ server }}
+   realm = {{ realm }}
+   security = ads
+   idmap config * : range = 16777216-33554431
+   template homedir = /home/%U
+   template shell = /bin/bash
+   kerberos method = secrets only
+   winbind use default domain = true
+   winbind offline logon = false
+   server string = Samba Server Version %v
+   passdb backend = tdbsam
+   load printers = yes
+   cups options = raw
+
+[homes]
+        comment = Home Directories
+        browseable = no
+        writable = yes

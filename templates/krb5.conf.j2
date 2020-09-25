@@ -1,0 +1,27 @@
+[logging]
+ default = FILE:/var/log/krb5libs.log
+ kdc = FILE:/var/log/krb5kdc.log
+ admin_server = FILE:/var/log/kadmind.log
+
+[libdefaults]
+default_keytab_name = FILE:/etc/krb5.keytab
+ticket_lifetime = 24h
+default_realm = {{ realm }}
+dns_lookup_realm = false
+dns_lookup_kdc = true
+forwardable = true
+[realms]
+{{ realm }} = {
+ {% for k in winbind_krb5.realms.kdc %}
+ kdc = {{ k }}
+ {% endfor %}
+  default_domain = {{ realm }}
+}
+[domain_realm]
+{% for R in winbind_krb5.domain_realms %}
+{{ R }} = {{ realm }}
+{% endfor %}
+[dbmodules]
+  {{ realm }} = {
+    db_library = ipadb.so
+  }

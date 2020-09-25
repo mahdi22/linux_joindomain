@@ -1,0 +1,98 @@
+# Join  domaine CentOS 6 With Samba and Winbind
+- name: Install Samba and winbind software
+  yum:
+    name: "{{ package6 }}"
+    state: present
+  environment: "{{ proxy_env }}"
+
+#- name: Install pexpect 3.3
+#  get_url:
+#    url: https://github.com/pexpect/pexpect/archive/3.3.tar.gz
+#    dest: /root/3.3.tar.gz
+#    use_proxy: yes
+#  environment: "{{ proxy_env }}"
+
+- name: Extract pexpect3.3.tar.gz
+  unarchive:
+    src: https://github.com/pexpect/pexpect/archive/3.3.tar.gz
+    dest: /root/
+    remote_src: on
+  register: unarchivepackage
+  environment: "{{ proxy_env }}"
+
+- name: Install pexpect 3.3
+  command: python setup.py install chdir=/root/pexpect-3.3
+  when: unarchivepackage.changed
+
+- name: Configuration Samba
+  template:
+    src: smb.conf.j2
+    dest: /etc/samba/smb.conf
+    owner: root
+  notify: restart samba related services
+
+- name: Configuration Krb5
+  template:
+    src: krb5.conf.j2
+    dest: /etc/krb5.conf
+  notify: restart samba related services
+
+- name: Configuration nsswitch
+  lineinfile:
+    backup: yes
+    state: present
+    dest: /etc/nsswitch.conf
+    regexp: '^{{ item.search }}'
+    line: '{{ item.replace }}'
+  with_items:
+    - { search: 'passwd', replace: 'passwd:     files winbind' }
+    - { search: 'shadow', replace: 'shadow:     files winbind' }
+    - { search: 'group', replace: 'group:      files winbind' }
+  notify: restart samba related services
+
+- name: Copy PAM configuration for winbind authentification
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+  loop:
+    - { src: system-auth, dest: /etc/pam.d/system-auth }
+    - { src: sshd, dest: /etc/pam.d/sshd }
+
+- name: Test if is joined to {{ DomainName }}
+  command: wbinfo -t
+  changed_when: no
+  register: wbinfo_test
+  failed_when: "wbinfo_test.rc == 3"
+
+- name: Set fact for join domain
+  set_fact:
+    join_domain: true
+  when: wbinfo_test.stdout_lines[0] !="checking the trust secret for domain {{ workgroup }} via RPC calls succeeded"
+
+- name: Join Domain {{ DomainName }}
+  expect:
+    command: /bin/bash -c "/usr/bin/net ads join -U {{ Join_User }}"
+    responses:
+      Enter *: "{{ Join_User_Pass }}"
+  notify: restart samba related services
+  when: join_domain is defined and join_domain == true
+
+- name: Restart samba service
+  service:
+    name: "{{ item }}"
+    state: restarted
+  with_items:
+    - smb
+    - winbind
+    - messagebus
+    - oddjobd
+
+- name: Test If is Joined domaine to {{ DomainName }}
+  command: wbinfo -t
+  changed_when: no
+  register: wbinfo_final_test
+  ignore_errors: yes
+
+- debug:
+    msg: "wbinfo status is {{ wbinfo_final_test.stdout }}"
