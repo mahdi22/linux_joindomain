@@ -32,9 +32,7 @@ galaxy_info:
     - redhat
     - centos
     - ansible
-    - devOps
     - debian
     - ubuntu
-    - Active Directory
 
 dependencies: []
