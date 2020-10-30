@@ -1,6 +1,6 @@
 galaxy_info:
   author: Mahdi BOURBITA
-  role_name: ansible_linux_joindomain
+  role_name: linux_joindomain
   description: Join Domain Active Directory using sssd for RedHat, CentOS, Debian, Ubuntu distributions and using samba winbind for Redhat/CentOS 6
 
   license: license (GPL-2.0-or-later)
