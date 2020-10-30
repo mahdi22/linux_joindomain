@@ -1,0 +1,38 @@
+- name: Install required packages
+  apt:
+    name: "{{ package }}"
+    state: present
+  environment: "{{ proxy_env }}"
+
+- name: Checking Domain Join status
+  command: id "{{ Join_User }}"
+  register: ad_status
+  changed_when: false
+  ignore_errors: true
+
+- name: Domain configs and Join {{ DomainName }}
+  block:
+    - name: Join {{ ansible_distribution }} {{ ansible_distribution_major_version }} into Domain {{ DomainName }}
+      expect:
+        command: /bin/bash -c "/usr/sbin/realm join -U {{ Join_User }} {{ DomainName }}"
+        responses:
+          Password for *: "{{ Join_User_Pass }}"
+
+    - name: Allow user Login without FQDN
+      lineinfile:
+        backup: yes
+        state: present
+        dest: /etc/sssd/sssd.conf
+        regexp: '^{{ item.search }}'
+        line: '{{ item.replace }}'
+      with_items:
+        - { search: 'use_fully_qualified_names', replace: 'use_fully_qualified_names = False' }
+        - { search: 'fallback_homedir', replace: 'fallback_homedir = /home/%u'}
+        - { search: 'access_provider', replace: 'access_provider = simple'}
+      notify: restart sssd
+
+    - name: Add pam authentification to common-session
+      lineinfile:
+        path: "/etc/pam.d/common-session"
+        line: "session optional        pam_mkhomedir.so skel=/etc/skel umask=077"
+  when: ad_status.rc !=0

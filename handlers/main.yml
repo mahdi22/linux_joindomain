@@ -1,7 +1,10 @@
 ---
 # handlers file for CentOSJoinDomain
 - name: restart sssd
-  service: name=sssd state=restarted
+  systemd:
+    name: sssd
+    state: restarted
+    enabled: yes
 
 - name: restart samba related services
   service:

@@ -3,39 +3,8 @@
 proxy_env:
   http_proxy: http://proxy.local:8080/
   https_proxy: http://proxy.local:8080/
-package:
-  - sssd 
-  - realmd 
-  - oddjob 
-  - oddjob-mkhomedir 
-  - adcli 
-  - samba-common 
-  - samba-common-tools 
-  - krb5-workstation 
-  - openldap-clients 
 Join_User: ADMDOMAIN
-DomainName: linuxlab.local
-Join_User_Pass: admdomainpassword
-package6:
-  - samba
-  - samba-common
-  - samba-winbind
-  - samba-winbind-clients
-  - krb5-workstation
-  - pam_krb5
-  - samba-client
-  - nss
-  - oddjob-mkhomedir
-  - python-setuptools
-workgroup: LAB
+DomainName: ADMDOMAIN
+Join_User_Pass: xjwB4x67Mh
 realm: LINUXLAB.LOCAL
 server: linuxlab.local
-winbind_krb5:
-  realms:
-    kdc:
-      - kerberos-1.linuxlab.local:88
-      - kerberos-2.linuxlab.local:88
-      - kerberos-3.linuxlab.local:88
-  domain_realms:
-    - .linuxlab.local
-    - linuxlab.local

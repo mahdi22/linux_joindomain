@@ -1,0 +1,13 @@
+---
+# vars file for CentOSJoinDomain
+package:
+  - sssd 
+  - realmd 
+  - oddjob 
+  - oddjob-mkhomedir 
+  - adcli 
+  - samba-common 
+  - samba-common-tools 
+  - krb5-workstation 
+  - openldap-clients
+  - python-setuptools-devel

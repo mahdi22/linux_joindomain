@@ -1,0 +1,23 @@
+---
+# vars file for CentOSJoinDomain
+package:
+  - samba
+  - samba-common
+  - samba-winbind
+  - samba-winbind-clients
+  - krb5-workstation
+  - pam_krb5
+  - samba-client
+  - nss
+  - oddjob-mkhomedir
+  - python-setuptools
+workgroup: LAB
+winbind_krb5:
+  realms:
+    kdc:
+      - kerberos-1.linuxlab.local:88
+      - kerberos-2.linuxlab.local:88
+      - kerberos-3.linuxlab.local:88
+  domain_realms:
+    - .linuxlab.local
+    - linuxlab.local

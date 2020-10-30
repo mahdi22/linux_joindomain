@@ -1,7 +1,7 @@
 # Join  domaine CentOS 6 With Samba and Winbind
 - name: Install Samba and winbind software
   yum:
-    name: "{{ package6 }}"
+    name: "{{ package }}"
     state: present
   environment: "{{ proxy_env }}"
 

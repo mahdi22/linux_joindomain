@@ -1,0 +1,16 @@
+---
+# vars file for CentOSJoinDomain
+package:
+  - sssd
+  - sssd-tools
+  - libnss-sss
+  - libpam-sss
+  - realmd 
+  - oddjob 
+  - oddjob-mkhomedir 
+  - adcli 
+  - samba-common 
+  - samba-common-bin 
+  - packagekit
+  - python-pexpect
+  - python3-pexpect
