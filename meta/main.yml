@@ -23,6 +23,7 @@ galaxy_info:
       - bionic
       - xenial
   galaxy_tags:
+    - system
     - linux
     - sssd
     - realm
