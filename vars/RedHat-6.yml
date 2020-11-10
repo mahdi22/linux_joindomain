@@ -11,6 +11,7 @@ package:
   - nss
   - oddjob-mkhomedir
   - python-setuptools
+  - libselinux-python
 workgroup: LAB
 winbind_krb5:
   realms:

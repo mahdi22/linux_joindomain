@@ -1,2 +1,3 @@
 ---
 # defaults file for CentOS7JoinDomain
+join_domain: true

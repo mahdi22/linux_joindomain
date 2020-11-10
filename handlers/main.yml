@@ -1,5 +1,8 @@
 ---
 # handlers file for CentOSJoinDomain
+- name: Install pexpect 3.3
+  command: python setup.py install chdir=/root/pexpect-3.3
+
 - name: restart sssd
   systemd:
     name: sssd
