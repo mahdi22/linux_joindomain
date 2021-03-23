@@ -10,26 +10,47 @@ This is an ansible role to automaticaly join Linux Machine CentOS and Redhat usi
 
 ansible-galaxy install mahdi22.linux_joindomain
 
+# Role Configuration
+
+file: defaults/main.yml
+```yaml
+#set this variable to True if the managed hosts are bihind a web proxy... default False
+use_proxy: False
+```
+```yaml
+proxy_env: []
+#Set environmenet variable for web proxy sexample:
+#  proxy_env:
+#  http_proxy: http://proxy.local:8080/
+#  https_proxy: http://proxy.local:8080/
+```
+
 # Role Variables
 
 file: vars/main.yml
-* Join_User: ADMDOMAIN # Replace ADMDOMAIN with the username domain admin
-* DomainName: linuxlab.local # Replace linuxlab.local with the domainname
-* Join_User_Pass: admdomainpassword # Replace admdomainpassword with the username domain admin password
-* workgroup: LAB # WORKGROUP
-* realm: LINUXLAB.LOCAL # Domaine Name
-* server: linuxlab.local # active directory server
-* kdc:
-    - kerberos-1.linuxlab.local:88 # The firt Kerberos server name
-    - kerberos-2.linuxlab.local:88 # The second Kerberos server name
-    - kerberos-3.linuxlab.local:88 # The third Kerberos server name
-* domain_realms:
-    - .linuxlab.local # domaine name
-    - linuxlab.local # domaine name
+```yaml
+Join_User: ADMDOMAIN # Replace ADMDOMAIN with the username domain admin
+DomainName: linuxlab.local # Replace linuxlab.local with the domainname
+Join_User_Pass: admdomainpassword # Replace admdomainpassword with the username domain admin password
+realm: LINUXLAB.LOCAL # replace this value with by Domaine Name
+server: linuxlab.local # replace this value with by active directory server
+```
+file: vars/RedHat-6.yml
+```yaml
+workgroup: LAB # replace this value with by WORKGROUP
+kdc:
+    - kerberos-1.linuxlab.local:88 # replace this value with by firt Kerberos server name
+    - kerberos-2.linuxlab.local:88 # replace this value with by second Kerberos server name
+    - kerberos-3.linuxlab.local:88 # replace this value with by third Kerberos server name
+domain_realms:
+    - .linuxlab.local # replace this value with by domaine name
+    - linuxlab.local # replace this value with by domaine name
+```
     
  # Example Playbook
- ```sh
+```yaml
 - hosts: servers
   roles:
     - role: mahdi22.linux_joindomain
       become: yes
+```

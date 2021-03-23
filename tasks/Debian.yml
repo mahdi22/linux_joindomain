@@ -3,6 +3,15 @@
     name: "{{ package }}"
     state: present
   environment: "{{ proxy_env }}"
+  when:
+    - use_proxy is defined
+    - use_proxy
+
+- name: Install required packages
+  apt:
+    name: "{{ package }}"
+    state: present
+  when: (use_proxy is not defined) or (not use_proxy)
 
 - name: Checking Domain Join status
   command: id "{{ Join_User }}"

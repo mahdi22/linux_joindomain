@@ -4,6 +4,15 @@
     name: "{{ package }}"
     state: present
   environment: "{{ proxy_env }}"
+  when:
+    - use_proxy is defined
+    - use_proxy
+
+- name: Install Samba and winbind software
+  yum:
+    name: "{{ package }}"
+    state: present
+  when: (use_proxy is not defined) or (not use_proxy)
 
 - name: Test if is joined to {{ DomainName }}
   command: wbinfo -t
@@ -25,6 +34,17 @@
       remote_src: on
     environment: "{{ proxy_env }}"
     notify: Install pexpect 3.3
+    when:
+    - use_proxy is defined
+    - use_proxy
+
+  - name: Extract pexpect3.3.tar.gz
+    unarchive:
+      src: https://github.com/pexpect/pexpect/archive/3.3.tar.gz
+      dest: /root/
+      remote_src: on
+    notify: Install pexpect 3.3
+    when: (use_proxy is not defined) or (not use_proxy) 
 
   - meta: flush_handlers
 

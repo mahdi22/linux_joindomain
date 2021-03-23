@@ -1,3 +1,9 @@
 ---
 # defaults file for CentOS7JoinDomain
 join_domain: true
+use_proxy: False
+proxy_env: []
+#example:
+#  proxy_env:
+#  http_proxy: http://proxy.local:8080/
+#  https_proxy: http://proxy.local:8080/

@@ -1,10 +1,7 @@
 ---
 # vars file for CentOSJoinDomain
-proxy_env:
-  http_proxy: http://proxy.local:8080/
-  https_proxy: http://proxy.local:8080/
 Join_User: ADMDOMAIN
-DomainName: ADMDOMAIN
-Join_User_Pass: xjwB4x67Mh
+DomainName: linuxlab.local
+Join_User_Pass: admdomainpassword
 realm: LINUXLAB.LOCAL
 server: linuxlab.local

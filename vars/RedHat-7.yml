@@ -11,3 +11,4 @@ package:
   - krb5-workstation 
   - openldap-clients
   - python-setuptools-devel
+  - python-pip

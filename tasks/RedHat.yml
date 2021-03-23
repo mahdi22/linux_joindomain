@@ -3,21 +3,55 @@
     name: "{{ package }}"
     state: present
   environment: "{{ proxy_env }}"
+  when:
+    - use_proxy is defined
+    - use_proxy
 
-- name: Install PEXPECT With Easy_Install For CentOS 7
-  easy_install:
+- name: Install Required Packages
+  yum:
+    name: "{{ package }}"
+    state: present
+  when: (use_proxy is not defined) or (not use_proxy)
+
+- name: Install PEXPECT With PIP For CentOS 7
+  pip:
     name: pexpect
+    executable: pip
   environment: "{{ proxy_env }}"
-  when: (ansible_distribution == "CentOS" or ansible_distribution == "RedHat") and
-          (ansible_distribution_major_version == "7")
+  when:
+    - (ansible_distribution == "CentOS") or (ansible_distribution == "RedHat")
+    - ansible_distribution_major_version == "7"
+    - use_proxy is defined
+    - use_proxy
+
+- name: Install PEXPECT With PIP For CentOS 7
+  pip:
+    name: pexpect
+    executable: pip
+  when:
+    - (ansible_distribution == "CentOS") or (ansible_distribution == "RedHat")
+    - ansible_distribution_major_version == "7"
+    - (use_proxy is not defined) or (not use_proxy)
 
 - name: Install PEXPECT with PIP3.6 For CentOS 8
   pip:
     name: pexpect
     executable: pip3.6
   environment: "{{ proxy_env }}"
-  when: (ansible_distribution == "CentOS" or ansible_distribution == "RedHat") and
-          (ansible_distribution_major_version == "8")
+  when:
+    - (ansible_distribution == "CentOS" or ansible_distribution == "RedHat")
+    - ansible_distribution_major_version == "8"
+    - use_proxy is defined
+    - use_proxy
+
+- name: Install PEXPECT with PIP3.6 For CentOS 8
+  pip:
+    name: pexpect
+    executable: pip3.6
+  when:
+    - (ansible_distribution == "CentOS" or ansible_distribution == "RedHat")
+    - ansible_distribution_major_version == "8"
+    - (use_proxy is not defined) or (not use_proxy)
 
 - name: Checking Domain Join status
   command: id "{{ Join_User }}"
@@ -25,24 +59,28 @@
   changed_when: false
   ignore_errors: true
 
-- name: Domain configs and Join {{ DomainName }}
-  block:
-    - name: Join {{ ansible_distribution }} {{ ansible_distribution_major_version }} into Domain {{ DomainName }}
-      expect:
-        command: /bin/bash -c "/usr/sbin/realm join --user={{ Join_User }} {{ DomainName }}"
-        responses:
-          Password for *: "{{ Join_User_Pass }}"
+- name: play ad_status
+  debug:
+    msg: "ad_status is {{ ad_status.rc }}"
 
-    - name: Allow user Login without FQDN
-      lineinfile:
-        backup: yes
-        state: present
-        dest: /etc/sssd/sssd.conf
-        regexp: '^{{ item.search }}'
-        line: '{{ item.replace }}'
-      with_items:
-        - { search: 'use_fully_qualified_names', replace: 'use_fully_qualified_names = False' }
-        - { search: 'fallback_homedir', replace: 'fallback_homedir = /home/%u'}
-        - { search: 'access_provider', replace: 'access_provider = simple'}
-      notify: restart sssd
+- name: Join into Domain {{ DomainName }}
+  expect:
+    command: /bin/bash -c "/usr/sbin/realm join --user={{ Join_User }} {{ DomainName }}"
+    responses:
+      Password for *: "{{ Join_User_Pass }}"
   when: ad_status.rc !=0
+
+- name: Allow user Login without FQDN
+  lineinfile:
+    backup: yes
+    state: present
+    dest: /etc/sssd/sssd.conf
+    regexp: '^{{ item.search }}'
+    line: '{{ item.replace }}'
+  with_items:
+    - { search: 'use_fully_qualified_names', replace: 'use_fully_qualified_names = False' }
+    - { search: 'fallback_homedir', replace: 'fallback_homedir = /home/%u'}
+    - { search: 'access_provider', replace: 'access_provider = simple'}
+  notify: restart sssd
+  when: ad_status.rc !=0
+  
