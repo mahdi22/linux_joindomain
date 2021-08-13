@@ -1,7 +1,2 @@
 ---
 # vars file for CentOSJoinDomain
-Join_User: ADMDOMAIN
-DomainName: linuxlab.local
-Join_User_Pass: admdomainpassword
-realm: LINUXLAB.LOCAL
-server: linuxlab.local

@@ -1,0 +1,13 @@
+---
+# vars file for CentOSJoinDomain
+workgroup: LAB
+winbind_krb5:
+  realms:
+    kdc:
+      - kerberos-1.linuxlab.local:88
+      - kerberos-1.linuxlab.local:88
+      - kerberos-1.linuxlab.local:88
+  domain_realms:
+    - .linuxlab.local
+    - linuxlab.local
+    
