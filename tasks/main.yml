@@ -1,13 +1,17 @@
 ---
 # tasks file for CentOSJoinDomain
 - name: include distribution dependency variables
-  include_vars: "{{ item }}"
+  include_vars: "{{ filename }}"
   with_first_found:
     - "{{ ansible_distribution_file_variety }}-{{ ansible_distribution_major_version }}.yml"
     - "{{ ansible_distribution_file_variety }}.yml"
+  loop_control:
+    loop_var: filename
 
 - name: Linux Join Active Directory Domaine Tasks
-  include_tasks: "{{ item }}"
+  include_tasks: "{{ filename }}"
   with_first_found:
     - "{{ ansible_distribution_file_variety }}-{{ ansible_distribution_major_version }}.yml"
     - "{{ ansible_distribution_file_variety }}.yml"
+  loop_control:
+    loop_var: filename
