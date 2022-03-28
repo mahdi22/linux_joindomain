@@ -7,3 +7,19 @@ proxy_env: []
 #  proxy_env:
 #  http_proxy: http://proxy.local:8080/
 #  https_proxy: http://proxy.local:8080/
+Join_User: ADMDOMAIN
+DomainName: linuxlab.local
+Join_User_Pass: admdomainpassword
+realm: LINUXLAB.LOCAL
+server: linuxlab.local
+#### CentOS/RHel 6 VARS #######
+workgroup: LAB
+winbind_krb5:
+  realms:
+    kdc:
+      - kerberos-1.linuxlab.local:88
+      - kerberos-1.linuxlab.local:88
+      - kerberos-1.linuxlab.local:88
+  domain_realms:
+    - .linuxlab.local
+    - linuxlab.local
