@@ -1,5 +1,5 @@
 <h1>linux_joindomain</h1>
-This is an ansible role to automaticaly join Linux Machine CentOS and Redhat using sssd, realm, samba and winbind. This role is tested on RedHat/CentOS 7.x, 8.x 6.6 and Ubuntu 20 18 16 and Debian 10 9
+This is an ansible role to automaticaly join Linux Machine CentOS and Redhat using sssd, realm, samba and winbind. This role is tested on RedHat/CentOS 7.x, 8.x 6.6 and Ubuntu 22 20 18 16 and Debian 10 9
 
 # Requirements
 
