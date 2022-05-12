@@ -54,3 +54,18 @@ domain_realms:
     - role: mahdi22.linux_joindomain
       become: yes
 ```
+
+## Testing
+
+This role is tested on Linux distributions:
+
+- RHEL/CentOS 8
+- RHEL/CentOS 7
+- Debian 10
+- Debian 9
+- Debian 8
+- Ubuntu 22.04
+- Ubuntu 20.04
+- Ubuntu 19.10
+- Ubuntu 18.04
+- Ubuntu 16.04
