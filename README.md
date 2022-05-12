@@ -61,6 +61,7 @@ This role is tested on Linux distributions:
 
 - RHEL/CentOS 8
 - RHEL/CentOS 7
+- RHEL/CentOS 6
 - Debian 10
 - Debian 9
 - Debian 8
