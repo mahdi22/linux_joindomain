@@ -23,3 +23,5 @@ winbind_krb5:
   domain_realms:
     - .linuxlab.local
     - linuxlab.local
+fallback_homedir: '/home/%u'
+use_fully_qualified_names: False
