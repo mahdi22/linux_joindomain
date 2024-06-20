@@ -45,6 +45,8 @@ kdc:
 domain_realms:
     - .linuxlab.local # replace this value with by domaine name
     - linuxlab.local # replace this value with by domaine name
+fallback_homedir: '/home/%u'
+use_fully_qualified_names: False
 ```
     
  # Example Playbook

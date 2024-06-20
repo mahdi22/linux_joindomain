@@ -78,8 +78,8 @@
     regexp: '^{{ item.search }}'
     line: '{{ item.replace }}'
   with_items:
-    - { search: 'use_fully_qualified_names', replace: 'use_fully_qualified_names = False' }
-    - { search: 'fallback_homedir', replace: 'fallback_homedir = /home/%u'}
+    - { search: 'use_fully_qualified_names', replace: 'use_fully_qualified_names = {{ use_fully_qualified_names }}' }
+    - { search: 'fallback_homedir', replace: 'fallback_homedir = {{ fallback_homedir }}'}
     - { search: 'access_provider', replace: 'access_provider = simple'}
   notify: restart sssd
   when: ad_status.rc !=0
